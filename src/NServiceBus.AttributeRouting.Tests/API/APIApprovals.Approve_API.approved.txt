@@ -1,0 +1,22 @@
+﻿[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
+namespace NServiceBus.AttributeRouting
+{
+    public class AttributeRoutingFeature : NServiceBus.Features.Feature
+    {
+        public AttributeRoutingFeature() { }
+        protected override void Setup(NServiceBus.Features.FeatureConfigurationContext context) { }
+    }
+    [System.AttributeUsageAttribute(System.AttributeTargets.Class | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
+    public class RouteToAttribute : System.Attribute
+    {
+        public RouteToAttribute(string destination) { }
+        public string Destination { get; }
+    }
+}
+namespace NServiceBus
+{
+    public class static RoutingSettingsExtensions
+    {
+        public static void EnableAttributeRouting(this NServiceBus.EndpointConfiguration endpointConfiguration) { }
+    }
+}
