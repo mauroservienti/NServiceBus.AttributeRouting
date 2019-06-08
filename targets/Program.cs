@@ -15,9 +15,9 @@ internal class Program
             solution => Run(sdk.GetDotnetCliPath(), $"build \"{solution}\" --configuration Release"));
 
         Target("test", DependsOn("build"),
-            Directory.EnumerateFiles("src", "*.Tests.csproj", SearchOption.AllDirectories),
+            Directory.EnumerateFiles("src", "*Tests.csproj", SearchOption.AllDirectories),
             proj => Run(sdk.GetDotnetCliPath(), $"test \"{proj}\" --configuration Release --no-build"));
-
+        
         RunTargets(args);
     }
 }
