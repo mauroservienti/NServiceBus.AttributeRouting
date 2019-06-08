@@ -1,17 +1,17 @@
 using NServiceBus.AcceptanceTesting;
+using NUnit.Framework;
 using System.Threading.Tasks;
-using Xunit;
 
 namespace NServiceBus.AttributeRouting.AcceptanceTests
 {
     public class When_using_conventions
     {
-        [Fact]
+        [Test]
         public async Task route_to_attribute_should_be_respected()
         {
             var context = await Scenario.Define<Context>()
-                .WithEndpoint<When_using_conventions_SenderEndpoint>(g => g.When(b => b.Send(new AConventionBasedMessage())))
-                .WithEndpoint<When_using_conventions_ReceiverEndpoint>()
+                .WithEndpoint<SenderEndpoint>(g => g.When(b => b.Send(new AConventionBasedMessage())))
+                .WithEndpoint<ReceiverEndpoint>()
                 .Done(c => c.MessageReceived)
                 .Run();
 
@@ -23,9 +23,9 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
             public bool MessageReceived { get; set; }
         }
 
-        class When_using_conventions_SenderEndpoint : EndpointConfigurationBuilder
+        class SenderEndpoint : EndpointConfigurationBuilder
         {
-            public When_using_conventions_SenderEndpoint()
+            public SenderEndpoint()
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
@@ -35,9 +35,9 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
             }
         }
 
-        class When_using_conventions_ReceiverEndpoint : EndpointConfigurationBuilder
+        class ReceiverEndpoint : EndpointConfigurationBuilder
         {
-            public When_using_conventions_ReceiverEndpoint()
+            public ReceiverEndpoint()
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
@@ -58,7 +58,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
             }
         }
 
-        [RouteTo("When_using_conventions_ReceiverEndpoint")]
+        [RouteTo("ReceiverEndpoint")]
         public class AConventionBasedMessage
         {
         }
