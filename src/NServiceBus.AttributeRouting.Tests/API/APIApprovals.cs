@@ -1,14 +1,14 @@
 ﻿using ApprovalTests;
 using ApprovalTests.Reporters;
+using NUnit.Framework;
 using PublicApiGenerator;
 using System.Runtime.CompilerServices;
-using Xunit;
 
 namespace NServiceBus.AttributeRouting.Tests.API
 {
     public class APIApprovals
     {
-        [Fact]
+        [Test]
         [UseReporter(typeof(DiffReporter))]
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void Approve_API()

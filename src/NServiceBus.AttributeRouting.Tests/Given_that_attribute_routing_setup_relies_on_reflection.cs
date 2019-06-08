@@ -1,13 +1,13 @@
 using NServiceBus.Unicast.Messages;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Reflection;
-using Xunit;
 
 namespace NServiceBus.AttributeRouting.Tests
 {
     public class Given_that_attribute_routing_setup_relies_on_reflection
     {
-        [Fact]
+        [Test]
         public void Make_sure_message_metadata_registry_doesnt_change()
         {
             var method = typeof(MessageMetadataRegistry)
