@@ -1,5 +1,6 @@
-# NServiceBus learning transport storage
+# NServiceBus learning transport and acceptance testing transport storage
 .learningtransport/
+.attransport/
 
 # Platform data storage
 .db/
