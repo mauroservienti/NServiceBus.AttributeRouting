@@ -1,3 +1,5 @@
+<img src="assets/icon.png" width="100" />
+
 # NServiceBus.AttributeRouting
 
 Enables to configure messages and commands routing by using attributes on message types:
