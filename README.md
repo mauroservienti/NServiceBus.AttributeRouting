@@ -15,3 +15,7 @@ and when configuring the endpoint:
 ```
 endpointConfiguration.EnableAttributeRouting();
 ```
+
+---
+
+Nuget package: [https://www.nuget.org/packages/NServiceBus.AttributeRouting/](https://www.nuget.org/packages/NServiceBus.AttributeRouting/)
