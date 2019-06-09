@@ -59,8 +59,13 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
             recoverability.Immediate(immediate => immediate.NumberOfRetries(0));
             configuration.SendFailedMessagesTo("error");
 
-            configuration.UseTransport<AcceptanceTestingTransport>()
+            var transportConfig = configuration.UseTransport<AcceptanceTestingTransport>()
                 .StorageDirectory(storageDir);
+
+            if (runDescriptor.Settings.TryGet<Action<RoutingSettings>>(out var routingCustomization))
+            {
+                routingCustomization(transportConfig.Routing());
+            }
 
             configuration.RegisterComponentsAndInheritanceHierarchy(runDescriptor);
 

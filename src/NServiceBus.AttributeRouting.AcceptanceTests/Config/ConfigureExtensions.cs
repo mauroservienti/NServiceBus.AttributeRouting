@@ -1,5 +1,6 @@
 ﻿using NServiceBus.AcceptanceTesting.Support;
 using NServiceBus.ObjectBuilder;
+using System;
 
 namespace NServiceBus.AttributeRouting.AcceptanceTests
 {
@@ -18,6 +19,11 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 r.RegisterSingleton(type, runDescriptor.ScenarioContext);
                 type = type.BaseType;
             }
+        }
+
+        public static void CustomizeRouting(this RunDescriptor runDescriptor, Action<RoutingSettings> routingConfig)
+        {
+            runDescriptor.Settings.Set(routingConfig);
         }
     }
 }
