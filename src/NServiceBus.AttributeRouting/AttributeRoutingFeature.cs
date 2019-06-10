@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace NServiceBus.AttributeRouting
 {
@@ -23,36 +24,60 @@ namespace NServiceBus.AttributeRouting
                 .GetMethod("GetAllMessages", BindingFlags.Instance | BindingFlags.NonPublic)
                 .Invoke(messageMetadataRegistry, null);
 
-            var routes = new List<RouteTableEntry>();
-
-            foreach (var messageMetadata in allMessageMetadata)
-            {
-                if (IsRouteDefinedFor(messageMetadata.MessageType, unicastRoutingTable))
-                {
-                    continue;
-                }
-
-                var routeTo = messageMetadata.MessageType.GetCustomAttribute<RouteToAttribute>();
-                if (routeTo != null)
-                {
-                    routes.Add(new RouteTableEntry(messageMetadata.MessageType, UnicastRoute.CreateFromEndpointName(routeTo.Destination)));
-                }
-            }
-
-            if (routes.Any())
-            {
-                unicastRoutingTable.AddOrReplaceRoutes("AttributeRoutingSource", routes);
-            }
+            context.RegisterStartupTask(new AttributeRoutingSetup(unicastRoutingTable, allMessageMetadata));
         }
 
-        bool IsRouteDefinedFor(Type messageType, UnicastRoutingTable unicastRoutingTable)
+        class AttributeRoutingSetup : FeatureStartupTask
         {
-            //this could be a FastDelegate invocation
-            var unicastRoute = (UnicastRoute)typeof(UnicastRoutingTable)
-                .GetMethod("GetRouteFor", BindingFlags.Instance | BindingFlags.NonPublic)
-                .Invoke(unicastRoutingTable, new[] { messageType });
+            private UnicastRoutingTable unicastRoutingTable;
+            private IEnumerable<MessageMetadata> allMessageMetadata;
 
-            return unicastRoute != null;
+            public AttributeRoutingSetup(UnicastRoutingTable unicastRoutingTable, IEnumerable<MessageMetadata> allMessageMetadata)
+            {
+                this.unicastRoutingTable = unicastRoutingTable;
+                this.allMessageMetadata = allMessageMetadata;
+            }
+
+            protected override Task OnStart(IMessageSession session)
+            {
+                var routes = new List<RouteTableEntry>();
+
+                foreach (var messageMetadata in allMessageMetadata)
+                {
+                    if (IsRouteDefinedFor(messageMetadata.MessageType, unicastRoutingTable))
+                    {
+                        continue;
+                    }
+
+                    var routeTo = messageMetadata.MessageType.GetCustomAttribute<RouteToAttribute>();
+                    if (routeTo != null)
+                    {
+                        routes.Add(new RouteTableEntry(messageMetadata.MessageType, UnicastRoute.CreateFromEndpointName(routeTo.Destination)));
+                    }
+                }
+
+                if (routes.Any())
+                {
+                    unicastRoutingTable.AddOrReplaceRoutes("AttributeRoutingSource", routes);
+                }
+
+                return Task.CompletedTask;
+            }
+
+            protected override Task OnStop(IMessageSession session)
+            {
+                return Task.CompletedTask;
+            }
+
+            bool IsRouteDefinedFor(Type messageType, UnicastRoutingTable unicastRoutingTable)
+            {
+                //this could be a FastDelegate invocation
+                var unicastRoute = (UnicastRoute)typeof(UnicastRoutingTable)
+                    .GetMethod("GetRouteFor", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(unicastRoutingTable, new[] { messageType });
+
+                return unicastRoute != null;
+            }
         }
     }
 }
