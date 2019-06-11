@@ -23,21 +23,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
         {
             this.typesToInclude = typesToInclude;
 
-            var testRunId = TestContext.CurrentContext.Test.ID;
-
-            string tempDir;
-
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                //can't use bin dir since that will be too long on the build agents
-                tempDir = @"c:\temp";
-            }
-            else
-            {
-                tempDir = Path.GetTempPath();
-            }
-
-            storageDir = Path.Combine(tempDir, testRunId);
+            storageDir = StorageUtils.GetAcceptanceTestingTransportStorageDirectory();
         }
 
         public Task<EndpointConfiguration> GetConfiguration(RunDescriptor runDescriptor, EndpointCustomizationConfiguration endpointConfiguration, Action<EndpointConfiguration> configurationBuilderCustomization)
@@ -61,11 +47,6 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
 
             var transportConfig = configuration.UseTransport<AcceptanceTestingTransport>()
                 .StorageDirectory(storageDir);
-
-            if (runDescriptor.Settings.TryGet<Action<RoutingSettings>>(out var routingCustomization))
-            {
-                routingCustomization(transportConfig.Routing());
-            }
 
             configuration.RegisterComponentsAndInheritanceHierarchy(runDescriptor);
 
