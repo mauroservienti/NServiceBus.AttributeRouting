@@ -1,5 +1,6 @@
 ﻿using NServiceBus.AcceptanceTesting.Support;
 using NServiceBus.ObjectBuilder;
+using System;
 
 namespace NServiceBus.AttributeRouting.AcceptanceTests
 {

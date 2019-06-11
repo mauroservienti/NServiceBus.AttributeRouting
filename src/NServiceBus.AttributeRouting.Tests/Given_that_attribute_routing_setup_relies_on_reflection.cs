@@ -1,3 +1,4 @@
+using NServiceBus.Routing;
 using NServiceBus.Unicast.Messages;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -16,6 +17,17 @@ namespace NServiceBus.AttributeRouting.Tests
 
             Assert.False(method == null, "Cannot find GetAllMessages method on MessageMetadataRegistry type");
             Assert.True(method.ReturnType == typeof(IEnumerable<MessageMetadata>), "The return type is not the expected IEnumerable<MessageMetadata>.");
+        }
+
+        [Test]
+        public void Make_sure_unicast_routing_table_GetRouteFor_doesnt_change()
+        {
+            var method = typeof(UnicastRoutingTable)
+                .GetMethod("GetRouteFor", BindingFlags.Instance | BindingFlags.NonPublic);
+
+
+            Assert.False(method == null, "Cannot find GetRouteFor method on UnicastRoutingTable type");
+            Assert.True(method.ReturnType == typeof(UnicastRoute), "The return type is not the expected UnicastRoute.");
         }
     }
 }
