@@ -28,12 +28,13 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
         {
             public SenderEndpoint()
             {
-                EndpointSetup<DefaultServer>((config, runDescriptor) =>
+                EndpointSetup<DefaultServer>(config =>
                 {
-                    runDescriptor.CustomizeRouting(routingSettings =>
-                    {
-                        routingSettings.RouteToEndpoint(typeof(Message), "ReceiverEndpoint");
-                    });
+                    config.UseTransport<AcceptanceTestingTransport>()
+                        .StorageDirectory(StorageUtils.GetAcceptanceTestingTransportStorageDirectory())
+                        .Routing()
+                        .RouteToEndpoint(typeof(Message), "ReceiverEndpoint");
+
                     config.Conventions().DefiningMessagesAs(t => t == typeof(Message));
                     config.EnableAttributeRouting();
                 });
