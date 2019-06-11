@@ -20,10 +20,5 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 type = type.BaseType;
             }
         }
-
-        public static void CustomizeRouting(this RunDescriptor runDescriptor, Action<RoutingSettings> routingConfig)
-        {
-            runDescriptor.Settings.Set(routingConfig);
-        }
     }
 }
