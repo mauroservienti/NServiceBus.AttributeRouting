@@ -16,6 +16,8 @@ and when configuring the endpoint:
 endpointConfiguration.EnableAttributeRouting();
 ```
 
+NOTE: Only Messages and Commands are supported. Inj NServiceBus Events are treated differently based on the underlying transport capabilities. If the transport supports native pub/sub (e.g. RabbitMQ or Azure Service Bus) everything is handled automatically, otherwise publishers needs to be manually registered. As of now registering publishers using attributes is not supported.
+
 ## Routes override
 
 Attributes based routes are applied after explicitely defined routes, this allows to define overrides for routes defined using attributes.
