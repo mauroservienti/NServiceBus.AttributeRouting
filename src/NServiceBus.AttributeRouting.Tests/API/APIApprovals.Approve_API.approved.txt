@@ -6,12 +6,6 @@ namespace NServiceBus.AttributeRouting
         public AttributeRoutingFeature() { }
         protected override void Setup(NServiceBus.Features.FeatureConfigurationContext context) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Class | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
-    public class RouteToAttribute : System.Attribute
-    {
-        public RouteToAttribute(string destination) { }
-        public string Destination { get; }
-    }
 }
 namespace NServiceBus
 {

@@ -10,13 +10,15 @@ public class SampleMessage
 {}
 ```
 
+> NOTE: Attributes are defined in a separate [NServiceBus.AttributeRouting.Contracts](https://github.com/mauroservienti/NServiceBus.AttributeRouting.Contracts) package to prevent coupling endpoints to the NServiceBus version this feature depends on.
+
 and when configuring the endpoint:
 
 ```
 endpointConfiguration.EnableAttributeRouting();
 ```
 
-NOTE: Only [Messages and Commands](https://docs.particular.net/nservicebus/messaging/messages-events-commands) are supported. In NServiceBus Events are treated differently based on the underlying transport capabilities: If the transport supports native pub/sub (e.g. RabbitMQ or Azure Service Bus) everything is handled automatically, otherwise publishers needs to be manually registered. As of now registering publishers using attributes is not supported.
+> NOTE: Only [Messages and Commands](https://docs.particular.net/nservicebus/messaging/messages-events-commands) are supported. In NServiceBus Events are treated differently based on the underlying transport capabilities: If the transport supports native pub/sub (e.g. RabbitMQ or Azure Service Bus) everything is handled automatically, otherwise publishers needs to be manually registered. As of now registering publishers using attributes is not supported.
 
 ## Routes override
 
@@ -37,7 +39,7 @@ NewDestination will take precedence over DestinationEndpoint.
 
 ### Downloads
 
-Nuget package: [https://www.nuget.org/packages/NServiceBus.AttributeRouting/](https://www.nuget.org/packages/NServiceBus.AttributeRouting/)
+Nuget package: <https://www.nuget.org/packages/NServiceBus.AttributeRouting/>
 
 ---
 

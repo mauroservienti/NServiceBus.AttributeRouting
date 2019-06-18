@@ -1,4 +1,5 @@
-﻿using NServiceBus.Features;
+﻿using NServiceBus.AttributeRouting.Contracts;
+using NServiceBus.Features;
 using NServiceBus.Routing;
 using NServiceBus.Unicast.Messages;
 using System;
