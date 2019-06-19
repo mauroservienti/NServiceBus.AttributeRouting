@@ -36,7 +36,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                         .RouteToEndpoint(typeof(Message), "ReceiverEndpoint");
 
                     config.Conventions().DefiningMessagesAs(t => t == typeof(Message));
-                    config.EnableAttributeRouting();
+                    config.UseAttributeRouting();
                 });
             }
         }

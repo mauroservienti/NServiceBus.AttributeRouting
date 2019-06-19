@@ -28,7 +28,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
         {
             public SenderEndpoint()
             {
-                EndpointSetup<DefaultServer>(config=>config.EnableAttributeRouting());
+                EndpointSetup<DefaultServer>(config=>config.UseAttributeRouting());
             }
         }
 

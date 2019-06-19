@@ -31,7 +31,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 EndpointSetup<DefaultServer>(config =>
                 {
                     config.Conventions().DefiningMessagesAs(t => t == typeof(AConventionBasedMessage));
-                    config.EnableAttributeRouting();
+                    config.UseAttributeRouting();
                 });
             }
         }
