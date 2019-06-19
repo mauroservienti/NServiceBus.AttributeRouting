@@ -11,6 +11,6 @@ namespace NServiceBus
 {
     public class static RoutingSettingsExtensions
     {
-        public static void EnableAttributeRouting(this NServiceBus.EndpointConfiguration endpointConfiguration) { }
+        public static void UseAttributeRouting(this NServiceBus.EndpointConfiguration endpointConfiguration) { }
     }
 }
