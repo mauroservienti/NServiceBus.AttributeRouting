@@ -1,4 +1,4 @@
-﻿[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
+﻿[assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
 namespace NServiceBus.AttributeRouting
 {
     public class AttributeRoutingFeature : NServiceBus.Features.Feature
@@ -9,7 +9,7 @@ namespace NServiceBus.AttributeRouting
 }
 namespace NServiceBus
 {
-    public class static RoutingSettingsExtensions
+    public static class RoutingSettingsExtensions
     {
         public static void UseAttributeRouting(this NServiceBus.EndpointConfiguration endpointConfiguration) { }
     }
