@@ -13,11 +13,11 @@ namespace NServiceBus.AttributeRouting
     {
         public AttributeRoutingFeature()
         {
-
         }
 
         protected override void Setup(FeatureConfigurationContext context)
         {
+            var conventions = context.Settings.Get<Conventions>();
             var unicastRoutingTable = context.Settings.Get<UnicastRoutingTable>();
             var messageMetadataRegistry = context.Settings.Get<MessageMetadataRegistry>();
             var allMessageMetadata = (IEnumerable<MessageMetadata>)typeof(MessageMetadataRegistry)
@@ -35,7 +35,24 @@ namespace NServiceBus.AttributeRouting
                 var routeTo = messageMetadata.MessageType.GetCustomAttribute<RouteToAttribute>();
                 if (routeTo != null)
                 {
-                    routes.Add(new RouteTableEntry(messageMetadata.MessageType, UnicastRoute.CreateFromEndpointName(routeTo.Destination)));
+                    routes.Add(new RouteTableEntry(messageMetadata.MessageType,
+                        UnicastRoute.CreateFromEndpointName(routeTo.Destination)));
+                }
+                else
+                {
+                    var route = messageMetadata.MessageType.Assembly.GetCustomAttribute<RouteAttribute>();
+                    if (conventions.IsCommandType(messageMetadata.MessageType) 
+                        && route.CommandsDestination != null)
+                    {
+                        routes.Add(new RouteTableEntry(messageMetadata.MessageType,
+                            UnicastRoute.CreateFromEndpointName(route.CommandsDestination)));
+                    }
+                    else if (conventions.IsMessageType(messageMetadata.MessageType) 
+                             && route.MessagesDestination != null)
+                    {
+                        routes.Add(new RouteTableEntry(messageMetadata.MessageType,
+                            UnicastRoute.CreateFromEndpointName(route.MessagesDestination)));
+                    }
                 }
             }
 
@@ -50,7 +67,7 @@ namespace NServiceBus.AttributeRouting
             //this could be a FastDelegate invocation
             var unicastRoute = (UnicastRoute)typeof(UnicastRoutingTable)
                 .GetMethod("GetRouteFor", BindingFlags.Instance | BindingFlags.NonPublic)
-                .Invoke(unicastRoutingTable, new[] { messageType });
+                .Invoke(unicastRoutingTable, new[] {messageType});
 
             return unicastRoute != null;
         }
