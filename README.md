@@ -4,7 +4,7 @@
 
 Enables to configure messages and commands routing by using attributes on message types:
 
-```
+```csharp
 [RouteTo("DestinationEndpoint")]
 public class SampleMessage
 {}
@@ -14,11 +14,21 @@ public class SampleMessage
 
 and when configuring the endpoint:
 
-```
+```csharp
 endpointConfiguration.UseAttributeRouting();
 ```
 
 > NOTE: Only [Messages and Commands](https://docs.particular.net/nservicebus/messaging/messages-events-commands) are supported. In NServiceBus Events are treated differently based on the underlying transport capabilities: If the transport supports native pub/sub (e.g. RabbitMQ or Azure Service Bus) everything is handled automatically, otherwise publishers needs to be manually registered. As of now registering publishers using attributes is not supported.
+
+## Assembly level routing
+
+When using endpoint-oriented message assemblies, messages are grouped into assembly per endpoint. In such a scenario, commands and messages are generally treated as internal to the endpoint meaning that all messages and commands defined in a endpoint-oriented message assembly are routed to the same destination endpoint. It's possible to define routes at the assembly level:
+
+```csharp
+[assembly: Route(commandsTo: "destination-endpoint-for-commands", messagesTo: "destination-endpoint-for-messages")]
+```
+
+`commandsTo` and `messagesTo` are optional arguments. Commands are messages, meaning that by definining routes for messages, using `messagesTo`, will also define routes for commands. If `commandsTo` destination value is specified it'll have precedence over the `messagesTo` value.
 
 ## Routes override
 
@@ -30,7 +40,7 @@ NOTE: As of `NServiceBus 7.3.0` routes override cannot be used anymore. `7.3.0` 
 
 In such a scenario it’s suggested to deploy a new version of the messages assembly, if this is not possibile on not doable in a timely fashion attribute based routes can be overwritten by explicitly defining routes for a given message. If `SampleMessage` is the message type for which a route override needs to be defined, endpoint configuration can be changed as follows:
 
-```
+```csharp
 endpointConfiguration.UseTransport<YourChoice>()
    .Routing()
       .RouteToEndopoint( typeof( SampleMessage ), "NewDestination" );
