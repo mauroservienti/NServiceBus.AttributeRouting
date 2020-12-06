@@ -13,7 +13,7 @@ namespace NServiceBus.AttributeRouting.Tests.API
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void Approve_API()
         {
-            var publicApi = ApiGenerator.GeneratePublicApi(typeof(AttributeRoutingFeature).Assembly, options:null);
+            var publicApi = typeof(AttributeRoutingFeature).Assembly.GeneratePublicApi();
 
             Approvals.Verify(publicApi);
         }
