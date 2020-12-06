@@ -24,6 +24,8 @@ endpointConfiguration.UseAttributeRouting();
 
 Attributes based routes are applied after explicitely defined routes, this allows to define overrides for routes defined using attributes.
 
+NOTE: As of `NServiceBus 7.3.0` routes override cannot be used anymore. `7.3.0` [introduced a behavior breaking change](https://github.com/Particular/NServiceBus/issues/5712) in the order in which components and features are registered and invoked causing routes override to stop working.
+
 > Use case: an assembly containing a message decorated with the `RouteTo` attribute is distributed to endpoints. Later handlers topology change causing the message to end up at the wrong destination service.
 
 In such a scenario it’s suggested to deploy a new version of the messages assembly, if this is not possibile on not doable in a timely fashion attribute based routes can be overwritten by explicitly defining routes for a given message. If `SampleMessage` is the message type for which a route override needs to be defined, endpoint configuration can be changed as follows:
