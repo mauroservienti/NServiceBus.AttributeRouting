@@ -15,6 +15,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NServiceBus.AttributeRouting\NServiceBus.AttributeRouting.csproj" />
+    <ProjectReference Include="..\SomeMessages\SomeMessages.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="NServiceBus.AttributeRouting.Contracts" Version="0.0.2" />
   </ItemGroup>
 
 </Project>

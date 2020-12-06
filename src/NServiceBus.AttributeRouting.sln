@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.AttributeRoutin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.AttributeRouting.AcceptanceTests", "NServiceBus.AttributeRouting.AcceptanceTests\NServiceBus.AttributeRouting.AcceptanceTests.csproj", "{DF0C9CBB-E308-47E1-B94C-3930CC9E10BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SomeMessages", "SomeMessages\SomeMessages.csproj", "{00908C1C-F90E-466A-9172-34148A938119}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{DF0C9CBB-E308-47E1-B94C-3930CC9E10BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF0C9CBB-E308-47E1-B94C-3930CC9E10BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF0C9CBB-E308-47E1-B94C-3930CC9E10BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00908C1C-F90E-466A-9172-34148A938119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00908C1C-F90E-466A-9172-34148A938119}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00908C1C-F90E-466A-9172-34148A938119}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00908C1C-F90E-466A-9172-34148A938119}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
