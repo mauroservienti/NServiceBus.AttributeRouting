@@ -19,6 +19,7 @@ namespace Sender
 
             var endpointInstance = await Endpoint.Start(endpointConfig);
             await endpointInstance.Send(new Sample());
+            await endpointInstance.Send(new AnotherSample());
 
             await endpointInstance.Stop();
         }

@@ -9,7 +9,7 @@ namespace Receiver
     {
         public Task Handle(Sample message, IMessageHandlerContext context)
         {
-            Console.WriteLine($"Received: {context.MessageId}");
+            Console.WriteLine($"Sample received: {context.MessageId}");
             return Task.CompletedTask;
         }
     }
