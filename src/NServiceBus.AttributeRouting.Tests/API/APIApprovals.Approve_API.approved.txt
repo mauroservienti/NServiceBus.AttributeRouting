@@ -1,13 +1,6 @@
 ﻿[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/mauroservienti/NServiceBus.AttributeRouting.git")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("NServiceBus.AttributeRouting.Tests")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
-namespace NServiceBus.AttributeRouting
-{
-    public class AttributeRoutingFeature : NServiceBus.Features.Feature
-    {
-        public AttributeRoutingFeature() { }
-        protected override void Setup(NServiceBus.Features.FeatureConfigurationContext context) { }
-    }
-}
 namespace NServiceBus
 {
     public static class RoutingSettingsExtensions
