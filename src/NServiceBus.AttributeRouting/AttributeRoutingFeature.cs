@@ -18,6 +18,10 @@ namespace NServiceBus.AttributeRouting
 
         protected override void Setup(FeatureConfigurationContext context)
         {
+            var coreScannerConfig = context.Settings.Get<AssemblyScannerConfiguration>();
+            var excludedTypes = GetExcludedTypes(coreScannerConfig);
+            var excludedAssemblies = GetExcludedAssemblies(coreScannerConfig);
+            
             var scanner = new InternalAssemblyScanner();
             var assemblies = scanner.Scan().ToList();
             
@@ -64,6 +68,22 @@ namespace NServiceBus.AttributeRouting
             {
                 unicastRoutingTable.AddOrReplaceRoutes("AttributeRoutingSource", routes);
             }
+        }
+
+        List<Type> GetExcludedTypes(AssemblyScannerConfiguration configuration)
+        {
+            var property = typeof(AssemblyScannerConfiguration).GetProperty("ExcludedTypes",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+
+            return (List<Type>)property?.GetValue(configuration, null);
+        }
+
+        List<string> GetExcludedAssemblies(AssemblyScannerConfiguration configuration)
+        {
+            var property = typeof(AssemblyScannerConfiguration).GetProperty("ExcludedAssemblies",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+
+            return (List<string>)property?.GetValue(configuration, null);
         }
 
         bool IsRouteDefinedFor(Type messageType, UnicastRoutingTable unicastRoutingTable)
