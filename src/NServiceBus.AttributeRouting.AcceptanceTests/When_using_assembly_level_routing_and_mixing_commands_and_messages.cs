@@ -38,7 +38,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
         {
             public SenderEndpoint()
             {
-                EndpointSetup<ServerWithSomeMessages>((config, descriptor) =>
+                EndpointSetup<DefaultServer>((config, descriptor) =>
                 {
                     config.Conventions().DefiningMessagesAs(t => t == typeof(AMessage));
                     config.Conventions().DefiningCommandsAs(t => t == typeof(ACommand));

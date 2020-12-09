@@ -1,15 +1,15 @@
 ﻿using NServiceBus.AttributeRouting.Contracts;
 using NServiceBus.Features;
 using NServiceBus.Routing;
-using NServiceBus.Unicast.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NServiceBus.AttributeRouting.AssemblyScanning;
 
 namespace NServiceBus.AttributeRouting
 {
-    public class AttributeRoutingFeature : Feature
+    class AttributeRoutingFeature : Feature
     {
         public AttributeRoutingFeature()
         {
@@ -17,41 +17,40 @@ namespace NServiceBus.AttributeRouting
 
         protected override void Setup(FeatureConfigurationContext context)
         {
-            var conventions = context.Settings.Get<Conventions>();
+            var coreScannerConfig = context.Settings.Get<AssemblyScannerConfiguration>();
             var unicastRoutingTable = context.Settings.Get<UnicastRoutingTable>();
-            var messageMetadataRegistry = context.Settings.Get<MessageMetadataRegistry>();
-            var allMessageMetadata = (IEnumerable<MessageMetadata>)typeof(MessageMetadataRegistry)
-                .GetMethod("GetAllMessages", BindingFlags.Instance | BindingFlags.NonPublic)
-                .Invoke(messageMetadataRegistry, null);
+            var conventions = context.Settings.Get<Conventions>();
+
+            var messageTypes = TypesScanner.ScanMessageTypes(coreScannerConfig, conventions);
 
             var routes = new List<RouteTableEntry>();
-            foreach (var messageMetadata in allMessageMetadata)
+            foreach (var messageType in messageTypes)
             {
-                if (IsRouteDefinedFor(messageMetadata.MessageType, unicastRoutingTable))
+                if (IsRouteDefinedFor(messageType, unicastRoutingTable))
                 {
                     continue;
                 }
 
-                var routeTo = messageMetadata.MessageType.GetCustomAttribute<RouteToAttribute>();
-                if (routeTo != null)
+                var routeToAttribute = messageType.GetCustomAttribute<RouteToAttribute>();
+                if (routeToAttribute != null)
                 {
-                    routes.Add(new RouteTableEntry(messageMetadata.MessageType,
-                        UnicastRoute.CreateFromEndpointName(routeTo.Destination)));
+                    routes.Add(new RouteTableEntry(messageType,
+                        UnicastRoute.CreateFromEndpointName(routeToAttribute.Destination)));
                 }
                 else
                 {
-                    var route = messageMetadata.MessageType.Assembly.GetCustomAttribute<RouteAttribute>();
-                    if (conventions.IsCommandType(messageMetadata.MessageType) 
-                        && route.CommandsDestination != null)
+                    var routeAttribute = messageType.Assembly.GetCustomAttribute<RouteAttribute>();
+                    if (conventions.IsCommandType(messageType)
+                        && routeAttribute?.CommandsDestination != null)
                     {
-                        routes.Add(new RouteTableEntry(messageMetadata.MessageType,
-                            UnicastRoute.CreateFromEndpointName(route.CommandsDestination)));
+                        routes.Add(new RouteTableEntry(messageType,
+                            UnicastRoute.CreateFromEndpointName(routeAttribute.CommandsDestination)));
                     }
-                    else if (conventions.IsMessageType(messageMetadata.MessageType) 
-                             && route.MessagesDestination != null)
+                    else if (conventions.IsMessageType(messageType)
+                             && routeAttribute?.MessagesDestination != null)
                     {
-                        routes.Add(new RouteTableEntry(messageMetadata.MessageType,
-                            UnicastRoute.CreateFromEndpointName(route.MessagesDestination)));
+                        routes.Add(new RouteTableEntry(messageType,
+                            UnicastRoute.CreateFromEndpointName(routeAttribute.MessagesDestination)));
                     }
                 }
             }
