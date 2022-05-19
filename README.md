@@ -30,7 +30,7 @@ When using endpoint-oriented message assemblies, messages are grouped into assem
 
 `commandsTo` and `messagesTo` are optional arguments. Commands are messages, meaning that by definining routes for messages, using `messagesTo`, will also define routes for commands. If `commandsTo` destination value is specified it'll have precedence over the `messagesTo` value.
 
-## Routes override
+## Routes override (deprecated)
 
 Attributes based routes are applied after explicitely defined routes, this allows to define overrides for routes defined using attributes.
 
