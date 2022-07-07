@@ -4,6 +4,7 @@ using NServiceBus.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using NServiceBus.Unicast.Messages;
 
@@ -13,6 +14,12 @@ namespace NServiceBus.AttributeRouting
     {
         public AttributeRoutingFeature()
         {
+            var getRouteForMethodInfo = typeof(UnicastRoutingTable)
+                .GetMethod("GetRouteFor", BindingFlags.Instance | BindingFlags.NonPublic);
+            var messageTypeParameter = Expression.Parameter(typeof(Type), "messageType");
+            var routingTableParameter = Expression.Parameter(typeof(UnicastRoutingTable), "routingTable");
+            var methodCallExpression = Expression.Call(routingTableParameter, getRouteForMethodInfo, messageTypeParameter);
+            getRouteFor = Expression.Lambda<Func<UnicastRoutingTable, Type, UnicastRoute>>(methodCallExpression, routingTableParameter, messageTypeParameter).Compile();
         }
 
         protected override void Setup(FeatureConfigurationContext context)
@@ -61,12 +68,9 @@ namespace NServiceBus.AttributeRouting
 
         bool IsRouteDefinedFor(Type messageType, UnicastRoutingTable unicastRoutingTable)
         {
-            //this could be a FastDelegate invocation
-            var unicastRoute = (UnicastRoute)typeof(UnicastRoutingTable)
-                .GetMethod("GetRouteFor", BindingFlags.Instance | BindingFlags.NonPublic)
-                .Invoke(unicastRoutingTable, new[] {messageType});
-
-            return unicastRoute != null;
+            return getRouteFor(unicastRoutingTable, messageType) != null;
         }
+        
+        readonly Func<UnicastRoutingTable,Type,UnicastRoute> getRouteFor;
     }
 }
