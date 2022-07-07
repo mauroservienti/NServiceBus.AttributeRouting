@@ -35,7 +35,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 {
                     config.Conventions().DefiningCommandsAs(t => t == typeof(ACommandWithCustomRoute));
                     config.UseAttributeRouting();
-                });
+                }).IncludeType<ACommandWithCustomRoute>();
             }
         }
 
@@ -46,7 +46,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 EndpointSetup<DefaultServer>((config, descriptor) =>
                 {
                     config.Conventions().DefiningCommandsAs(t => t == typeof(ACommandWithCustomRoute));
-                });
+                }).IncludeType<ACommandWithCustomRoute>();
             }
 
             class Handler : IHandleMessages<ACommandWithCustomRoute>

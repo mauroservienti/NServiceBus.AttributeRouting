@@ -47,7 +47,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                     config.Conventions().DefiningMessagesAs(t => t== typeof(AMessage));
                     config.Conventions().DefiningCommandsAs(t => t.Name.StartsWith("ACommand"));
                     config.UseAttributeRouting();
-                });
+                }).IncludeType<ACommand>().IncludeType<AMessage>().IncludeType<ACommandWithCustomRoute>();
             }
         }
         
@@ -55,7 +55,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
         {
             public ReceiverEndpoint()
             {
-                EndpointSetup<DefaultServer>();
+                EndpointSetup<DefaultServer>().IncludeType<ACommand>();
             }
 
             class Handler : IHandleMessages<ACommand>
@@ -75,7 +75,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
         {
             public AnotherReceiverEndpoint()
             {
-                EndpointSetup<DefaultServer>();
+                EndpointSetup<DefaultServer>().IncludeType<ACommandWithCustomRoute>();
             }
 
             class Handler : IHandleMessages<ACommandWithCustomRoute>
@@ -95,7 +95,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
         {
             public MessageReceiverEndpoint()
             {
-                EndpointSetup<DefaultServer>();
+                EndpointSetup<DefaultServer>().IncludeType<AMessage>();
             }
 
             class Handler : IHandleMessages<AMessage>

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NServiceBus.AttributeRouting.AssemblyScanning;
+using NServiceBus.Unicast.Messages;
 
 namespace NServiceBus.AttributeRouting
 {
@@ -17,14 +17,12 @@ namespace NServiceBus.AttributeRouting
 
         protected override void Setup(FeatureConfigurationContext context)
         {
-            var coreScannerConfig = context.Settings.Get<AssemblyScannerConfiguration>();
             var unicastRoutingTable = context.Settings.Get<UnicastRoutingTable>();
             var conventions = context.Settings.Get<Conventions>();
-
-            var messageTypes = TypesScanner.ScanMessageTypes(coreScannerConfig, conventions);
+            var registry = context.Settings.Get<MessageMetadataRegistry>();
 
             var routes = new List<RouteTableEntry>();
-            foreach (var messageType in messageTypes)
+            foreach (var messageType in registry.GetAllMessages().Select(m => m.MessageType))
             {
                 if (IsRouteDefinedFor(messageType, unicastRoutingTable))
                 {

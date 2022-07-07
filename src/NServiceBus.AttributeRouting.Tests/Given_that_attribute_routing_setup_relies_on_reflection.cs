@@ -1,31 +1,21 @@
-using System;
 using NServiceBus.Routing;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Reflection;
+using NServiceBus.Unicast.Messages;
 
 namespace NServiceBus.AttributeRouting.Tests
 {
     public class Given_that_attribute_routing_setup_relies_on_reflection
     {
         [Test]
-        public void Make_sure_assembly_scanner_configuration_has_ExcludedAssemblies_property()
+        public void Make_sure_message_metadata_registry_GetAllMessages_doesnt_change()
         {
-            var property = typeof(AssemblyScannerConfiguration).GetProperty("ExcludedAssemblies",
+            var method = typeof(MessageMetadataRegistry).GetMethod("GetAllMessages",
                 BindingFlags.Instance | BindingFlags.NonPublic);
             
-            Assert.NotNull(property, "Cannot find ExcludedAssemblies property on AssemblyScannerConfiguration type");
-            Assert.True(property.PropertyType==typeof(List<string>),"The return type of ExcludedAssemblies is not the expected List<string>.");
-        }
-        
-        [Test]
-        public void Make_sure_assembly_scanner_configuration_has_ExcludedTypes_property()
-        {
-            var property = typeof(AssemblyScannerConfiguration).GetProperty("ExcludedTypes",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            
-            Assert.NotNull(property, "Cannot find ExcludedTypes property on AssemblyScannerConfiguration type");
-            Assert.True(property.PropertyType==typeof(List<Type>),"The return type of ExcludedTypes is not the expected List<Type>.");
+            Assert.False(method == null, "Cannot find GetAllMessages method on MessageMetadataRegistry type");
+            Assert.True(method.ReturnType == typeof(IEnumerable<MessageMetadata>), "The return type of GetAllMessages is not the expected IEnumerable<MessageMetadata>.");
         }
 
         [Test]
