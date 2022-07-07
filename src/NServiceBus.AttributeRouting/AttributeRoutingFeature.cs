@@ -4,8 +4,9 @@ using NServiceBus.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
-using NServiceBus.AttributeRouting.AssemblyScanning;
+using NServiceBus.Unicast.Messages;
 
 namespace NServiceBus.AttributeRouting
 {
@@ -13,18 +14,22 @@ namespace NServiceBus.AttributeRouting
     {
         public AttributeRoutingFeature()
         {
+            var getRouteForMethodInfo = typeof(UnicastRoutingTable)
+                .GetMethod("GetRouteFor", BindingFlags.Instance | BindingFlags.NonPublic);
+            var messageTypeParameter = Expression.Parameter(typeof(Type), "messageType");
+            var routingTableParameter = Expression.Parameter(typeof(UnicastRoutingTable), "routingTable");
+            var methodCallExpression = Expression.Call(routingTableParameter, getRouteForMethodInfo, messageTypeParameter);
+            getRouteFor = Expression.Lambda<Func<UnicastRoutingTable, Type, UnicastRoute>>(methodCallExpression, routingTableParameter, messageTypeParameter).Compile();
         }
 
         protected override void Setup(FeatureConfigurationContext context)
         {
-            var coreScannerConfig = context.Settings.Get<AssemblyScannerConfiguration>();
             var unicastRoutingTable = context.Settings.Get<UnicastRoutingTable>();
             var conventions = context.Settings.Get<Conventions>();
-
-            var messageTypes = TypesScanner.ScanMessageTypes(coreScannerConfig, conventions);
+            var registry = context.Settings.Get<MessageMetadataRegistry>();
 
             var routes = new List<RouteTableEntry>();
-            foreach (var messageType in messageTypes)
+            foreach (var messageType in registry.GetAllMessages().Select(m => m.MessageType))
             {
                 if (IsRouteDefinedFor(messageType, unicastRoutingTable))
                 {
@@ -63,12 +68,9 @@ namespace NServiceBus.AttributeRouting
 
         bool IsRouteDefinedFor(Type messageType, UnicastRoutingTable unicastRoutingTable)
         {
-            //this could be a FastDelegate invocation
-            var unicastRoute = (UnicastRoute)typeof(UnicastRoutingTable)
-                .GetMethod("GetRouteFor", BindingFlags.Instance | BindingFlags.NonPublic)
-                .Invoke(unicastRoutingTable, new[] {messageType});
-
-            return unicastRoute != null;
+            return getRouteFor(unicastRoutingTable, messageType) != null;
         }
+        
+        readonly Func<UnicastRoutingTable,Type,UnicastRoute> getRouteFor;
     }
 }

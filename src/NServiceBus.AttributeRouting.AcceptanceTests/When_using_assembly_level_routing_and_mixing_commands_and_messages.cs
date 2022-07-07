@@ -43,7 +43,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                     config.Conventions().DefiningMessagesAs(t => t == typeof(AMessage));
                     config.Conventions().DefiningCommandsAs(t => t == typeof(ACommand));
                     config.UseAttributeRouting();
-                });
+                }).IncludeType<ACommand>().IncludeType<AMessage>();
             }
         }
 
@@ -55,7 +55,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 {
                     config.Conventions().DefiningCommandsAs(t => t == typeof(ACommand));
                     config.Conventions().DefiningMessagesAs(t => t == typeof(AMessage));
-                });
+                }).IncludeType<ACommand>().IncludeType<AMessage>();
             }
 
             class Handler : IHandleMessages<ACommand>
@@ -79,7 +79,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 {
                     config.Conventions().DefiningCommandsAs(t => t == typeof(ACommand));
                     config.Conventions().DefiningMessagesAs(t => t == typeof(AMessage));
-                });
+                }).IncludeType<ACommand>().IncludeType<AMessage>();
             }
 
             class Handler : IHandleMessages<AMessage>
