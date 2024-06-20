@@ -1,26 +1,32 @@
 version: 2
 updates:
+# master
 - package-ecosystem: nuget
-  directory: "/src/NServiceBus.AttributeRouting.AcceptanceTests"
+  directory: "/"
   schedule:
     interval: daily
     time: '04:00'
   open-pull-requests-limit: 10
-- package-ecosystem: nuget
-  directory: "/src/NServiceBus.AttributeRouting.Tests"
+  target-branch: master
+- package-ecosystem: github-actions
+  directory: "/"
   schedule:
     interval: daily
     time: '04:00'
   open-pull-requests-limit: 10
+  target-branch: master
+# release 1.1
 - package-ecosystem: nuget
-  directory: "/src/NServiceBus.AttributeRouting"
+  directory: "/"
   schedule:
     interval: daily
     time: '04:00'
   open-pull-requests-limit: 10
-- package-ecosystem: nuget
-  directory: "/targets"
+  target-branch: release-1.1
+- package-ecosystem: github-actions
+  directory: "/"
   schedule:
     interval: daily
     time: '04:00'
   open-pull-requests-limit: 10
+  target-branch: release-1.1
