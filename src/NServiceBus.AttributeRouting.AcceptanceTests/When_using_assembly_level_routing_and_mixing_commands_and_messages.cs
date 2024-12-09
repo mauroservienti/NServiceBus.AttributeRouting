@@ -21,8 +21,8 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 .Done(c => c.CommandReceived && c.MessageReceived)
                 .Run();
 
-            Assert.True(context.CommandReceived);
-            Assert.True(context.MessageReceived);
+            Assert.That(context.CommandReceived, Is.True);
+            Assert.That(context.MessageReceived, Is.True);
         }
 
         class Context : ScenarioContext
@@ -55,10 +55,8 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 }).IncludeType<ACommand>().IncludeType<AMessage>();
             }
 
-            class Handler : IHandleMessages<ACommand>
+            class Handler(Context TestContext) : IHandleMessages<ACommand>
             {
-                public Context TestContext { get; set; }
-
                 public Task Handle(ACommand message, IMessageHandlerContext context)
                 {
                     TestContext.CommandReceived = true;
@@ -79,10 +77,8 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 }).IncludeType<ACommand>().IncludeType<AMessage>();
             }
 
-            class Handler : IHandleMessages<AMessage>
+            class Handler(Context TestContext) : IHandleMessages<AMessage>
             {
-                public Context TestContext { get; set; }
-
                 public Task Handle(AMessage message, IMessageHandlerContext context)
                 {
                     TestContext.MessageReceived = true;

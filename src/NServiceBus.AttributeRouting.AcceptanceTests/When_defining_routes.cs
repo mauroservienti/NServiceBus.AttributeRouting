@@ -15,7 +15,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 .Done(c => c.MessageReceived)
                 .Run();
 
-            Assert.True(context.MessageReceived);
+            Assert.That(context.MessageReceived, Is.True);
         }
 
         class Context : ScenarioContext
@@ -29,10 +29,12 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseTransport<AcceptanceTestingTransport>()
-                        .StorageDirectory(StorageUtils.GetAcceptanceTestingTransportStorageDirectory())
-                        .Routing()
-                        .RouteToEndpoint(typeof(Message), "ReceiverEndpoint");
+                    var routingSettings = config.UseTransport(new AcceptanceTestingTransport()
+                    {
+                        StorageLocation = StorageUtils.GetAcceptanceTestingTransportStorageDirectory()
+                    });
+                    
+                    routingSettings.RouteToEndpoint(typeof(Message), "ReceiverEndpoint");
 
                     config.Conventions().DefiningMessagesAs(t => t == typeof(Message));
                     config.UseAttributeRouting();
@@ -50,10 +52,8 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 });
             }
 
-            class Handler : IHandleMessages<Message>
+            class Handler(Context TestContext) : IHandleMessages<Message>
             {
-                public Context TestContext { get; set; }
-
                 public Task Handle(Message message, IMessageHandlerContext context)
                 {
                     TestContext.MessageReceived = true;

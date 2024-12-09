@@ -16,7 +16,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 .Done(c => c.CommandReceived)
                 .Run();
 
-            Assert.True(context.CommandReceived);
+            Assert.That(context.CommandReceived, Is.True);
         }
 
         class Context : ScenarioContext
@@ -46,10 +46,8 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 }).IncludeType<ACommandWithCustomRoute>();
             }
 
-            class Handler : IHandleMessages<ACommandWithCustomRoute>
+            class Handler(Context TestContext) : IHandleMessages<ACommandWithCustomRoute>
             {
-                public Context TestContext { get; set; }
-
                 public Task Handle(ACommandWithCustomRoute message, IMessageHandlerContext context)
                 {
                     TestContext.CommandReceived = true;

@@ -11,6 +11,7 @@ namespace Sender
                 .DefiningMessagesAs(t => t.Namespace != null && t.Namespace.Equals("Messages"));
             
             this.UseTransport<LearningTransport>();
+            this.UseSerialization<SystemJsonSerializer>();
             this.UseAttributeRouting();
         }
     }

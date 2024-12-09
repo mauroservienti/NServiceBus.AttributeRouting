@@ -29,11 +29,11 @@ namespace Sample.IntegrationTests
                 ) || c.HasFailedMessages())
                 .Run();
 
-            Assert.True(context.MessageWasProcessedByHandler<Messages.Sample, Receiver.SampleHandler>());
-            Assert.True(context.MessageWasProcessedByHandler<Messages.AnotherSample, Receiver.AnotherSampleHandler>());
+            Assert.That(context.MessageWasProcessedByHandler<Messages.Sample, Receiver.SampleHandler>(), Is.True);
+            Assert.That(context.MessageWasProcessedByHandler<Messages.AnotherSample, Receiver.AnotherSampleHandler>(), Is.True);
             
-            Assert.False(context.HasFailedMessages());
-            Assert.False(context.HasHandlingErrors());
+            Assert.That(context.HasFailedMessages(), Is.False);
+            Assert.That(context.HasHandlingErrors(), Is.False);
         }
 
         class SenderEndpoint : EndpointConfigurationBuilder
