@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using NServiceBus.AcceptanceTesting;
-using NServiceBus.AttributeRouting.Contracts;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using SomeMessages;

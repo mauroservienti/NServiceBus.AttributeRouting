@@ -1,5 +1,4 @@
-﻿using NServiceBus.AttributeRouting.Contracts;
-using NServiceBus.Features;
+﻿using NServiceBus.Features;
 using NServiceBus.Routing;
 using System;
 using System.Collections.Generic;
