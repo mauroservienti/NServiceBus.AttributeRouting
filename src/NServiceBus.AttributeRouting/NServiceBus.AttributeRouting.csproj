@@ -26,11 +26,14 @@
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="[7.1.9, 8.0.0)" />
+    <PackageReference Include="NServiceBus.AttributeRouting.Contracts" Version="[1.0.0, 2.0.0)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MinVer" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NServiceBus.AttributeRouting.Contracts" Version="[0.0.2, 1.0.0)" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
 

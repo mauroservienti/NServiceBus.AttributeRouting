@@ -1,3 +1,3 @@
-﻿using NServiceBus.AttributeRouting.Contracts;
+﻿using NServiceBus.AttributeRouting;
 
 [assembly: Route(commandsTo: "ReceiverEndpoint", messagesTo: "MessageReceiverEndpoint")]

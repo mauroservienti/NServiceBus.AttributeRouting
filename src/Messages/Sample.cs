@@ -1,4 +1,4 @@
-﻿using NServiceBus.AttributeRouting.Contracts;
+﻿using NServiceBus.AttributeRouting;
 
 namespace Messages
 {
