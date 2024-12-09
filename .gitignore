@@ -32,3 +32,6 @@ x86/
 # Visual Studio cache/options directory
 .vs/
 .idea/
+
+# macOS garbage
+.DS_Store
