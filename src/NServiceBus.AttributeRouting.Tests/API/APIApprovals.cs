@@ -13,9 +13,15 @@ namespace NServiceBus.AttributeRouting.Tests.API
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void Approve_API()
         {
-            var publicApi = typeof(AttributeRoutingFeature).Assembly.GeneratePublicApi();
+            var publicApi = typeof(AttributeRoutingFeature).Assembly.GeneratePublicApi(new ApiGeneratorOptions()
+            {
+                ExcludeAttributes =
+                [
+                    "System.Runtime.Versioning.TargetFrameworkAttribute"
+                ]
+            });
 
-            Approvals.Verify(publicApi);
+            Approvals.Verify(publicApi.Replace(".git", ""));
         }
     }
 }
