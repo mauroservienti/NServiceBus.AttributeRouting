@@ -15,7 +15,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 .Done(c => c.MessageReceived)
                 .Run();
 
-            Assert.True(context.MessageReceived);
+            Assert.That(context.MessageReceived, Is.True);
         }
 
         class Context : ScenarioContext
@@ -45,10 +45,8 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 });
             }
 
-            class Handler : IHandleMessages<AConventionBasedMessage>
+            class Handler(Context TestContext) : IHandleMessages<AConventionBasedMessage>
             {
-                public Context TestContext { get; set; }
-
                 public Task Handle(AConventionBasedMessage message, IMessageHandlerContext context)
                 {
                     TestContext.MessageReceived = true;

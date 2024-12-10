@@ -8,6 +8,7 @@ namespace Receiver
         {
             this.SendFailedMessagesTo("error");
             this.UseTransport<LearningTransport>();
+            this.UseSerialization<SystemJsonSerializer>();
         }
     }
 }

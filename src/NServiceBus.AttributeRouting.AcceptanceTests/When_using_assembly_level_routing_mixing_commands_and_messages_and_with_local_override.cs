@@ -23,9 +23,9 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 .Done(c => c.ACommandWithCustomRouteReceived && c.ACommandReceived && c.AMessageReceived)
                 .Run();
 
-            Assert.True(context.AMessageReceived);
-            Assert.True(context.ACommandReceived);
-            Assert.True(context.ACommandWithCustomRouteReceived);
+            Assert.That(context.AMessageReceived, Is.True);
+            Assert.That(context.ACommandReceived, Is.True);
+            Assert.That(context.ACommandWithCustomRouteReceived, Is.True);
         }
 
         class Context : ScenarioContext
@@ -55,10 +55,8 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 EndpointSetup<DefaultServer>().IncludeType<ACommand>();
             }
 
-            class Handler : IHandleMessages<ACommand>
+            class Handler(Context TestContext) : IHandleMessages<ACommand>
             {
-                public Context TestContext { get; set; }
-
                 public Task Handle(ACommand message, IMessageHandlerContext context)
                 {
                     TestContext.ACommandReceived = true;
@@ -75,10 +73,8 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 EndpointSetup<DefaultServer>().IncludeType<ACommandWithCustomRoute>();
             }
 
-            class Handler : IHandleMessages<ACommandWithCustomRoute>
+            class Handler(Context TestContext) : IHandleMessages<ACommandWithCustomRoute>
             {
-                public Context TestContext { get; set; }
-
                 public Task Handle(ACommandWithCustomRoute message, IMessageHandlerContext context)
                 {
                     TestContext.ACommandWithCustomRouteReceived = true;
@@ -95,10 +91,8 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
                 EndpointSetup<DefaultServer>().IncludeType<AMessage>();
             }
 
-            class Handler : IHandleMessages<AMessage>
+            class Handler(Context TestContext) : IHandleMessages<AMessage>
             {
-                public Context TestContext { get; set; }
-
                 public Task Handle(AMessage message, IMessageHandlerContext context)
                 {
                     TestContext.AMessageReceived = true;
