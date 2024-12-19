@@ -15,8 +15,8 @@ namespace NServiceBus.AttributeRouting.Tests
                 .GetMethod("GetRouteFor", BindingFlags.Instance | BindingFlags.NonPublic);
 
 
-            Assert.False(method == null, "Cannot find GetRouteFor method on UnicastRoutingTable type");
-            Assert.That(method.ReturnType == typeof(UnicastRoute), "The return type of GetRouteFor is not the expected UnicastRoute.");
+            Assert.That(method, Is.Not.Null, "Cannot find GetRouteFor method on UnicastRoutingTable type");
+            Assert.That(method.ReturnType, Is.EqualTo(typeof(UnicastRoute)), "The return type of GetRouteFor is not the expected UnicastRoute.");
         }
     }
 }
