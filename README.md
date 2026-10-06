@@ -49,6 +49,13 @@ endpointConfiguration.EnableAttributeRouting();
 
 NewDestination will take precedence over DestinationEndpoint.
 
+## Compatibility
+
+| NServiceBus.AttributeRouting | NServiceBus | .NET |
+|---|---|---|
+| 4.x | 10.x | .NET 10 |
+| 3.x | 9.x | .NET 8 |
+
 ### Downloads
 
 Nuget package: <https://www.nuget.org/packages/NServiceBus.AttributeRouting/>
