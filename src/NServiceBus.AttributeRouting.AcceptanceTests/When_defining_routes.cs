@@ -6,7 +6,7 @@ namespace NServiceBus.AttributeRouting.AcceptanceTests
 {
     public class When_defining_routes
     {
-        [Test, Explicit]
+        [Test]
         public async Task route_to_attribute_should_be_overwritten()
         {
             var context = await Scenario.Define<Context>()
